@@ -24,6 +24,9 @@ somaVetor (x1, y1) (x2, y2) = (x1+x2, y1+y2)
 moduloVetor :: (Double, Double) -> Double
 moduloVetor (x, y) = sqrt(x*x + y*y)
 
+moduloVetorPontos :: (Double, Double) -> (Double, Double) -> Double
+moduloVetorPontos (x1, y1) (x2, y2) = sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))
+
 {- Aula 03 -}
 
 addEspacos :: Int -> String
@@ -223,4 +226,4 @@ isCrescent f n = (f n - f (n-1) >= 0) && isCrescent f (n-1)
 
 quadradoLista xs = map quadrado xs
 
-somaQuadradosLista xs = foldr1 quadradoLista xs
+-- somaQuadradosLista xs = foldr1 quadradoLista xs
