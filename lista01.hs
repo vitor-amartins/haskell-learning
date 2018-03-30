@@ -1,4 +1,4 @@
-{- Lista 1 - 28/03 -}
+{----------------------------- Lista 1 - 28/03 -----------------------------}
 
 -------------------------------- Question 1 --------------------------------
 
@@ -32,10 +32,10 @@ valorDivisivel (a:at) b | b `mod` a == 0 = valorDivisivel (a:at) (b `div` a)
 
 -------------------------------- Question 3 --------------------------------
 
-combinations :: [Int] -> [[Int]]
-combinations [] = [[]]
-combinations [a] = [[a]] ++ [[]]
-combinations (a:at) = [[a]] ++ [(a:at)] ++ firstWithOthers a at ++ combinations at
+comb :: [Int] -> [[Int]]
+comb [] = [[]]
+comb [a] = [[a]] ++ [[]]
+comb (a:at) = [[a]] ++ [(a:at)] ++ firstWithOthers a at ++ comb at
 
 firstWithOthers :: Int -> [Int] -> [[Int]]
 firstWithOthers _ [] = []
@@ -43,4 +43,21 @@ firstWithOthers a (b:bt) = [[a] ++ [b]] ++ firstWithOthers a bt
 
 unique :: [[Int]] -> [[Int]]
 unique [[]] = [[]]
-unique (a:at) = a : unique [x | x <- at, x /= a]    
+unique (a:at) = a : filter (\x -> x /= a) (unique at)
+
+comb2 :: [Int] -> Int -> [[Int]]
+comb2 [] _ = [[]]
+comb2 _ 0 = [[]]
+comb2 l n = comb l ++ comb2 (rollVector l) (n-1)
+
+combinations :: [Int] -> [[Int]]
+combinations [] = [[]]
+combinations l = unique (map quickSort (comb2 l (length l)))
+
+rollVector :: [Int] -> [Int]
+rollVector [] = []
+rollVector (a:at) = at ++ [a]
+
+quickSort :: [Int] -> [Int]
+quickSort [] = []
+quickSort (a:at) = quickSort [x | x <- at, x <= a]++ [a] ++ quickSort [x | x <- at, x > a]
