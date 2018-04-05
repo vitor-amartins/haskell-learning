@@ -33,6 +33,17 @@ a = [["The Shape of Water", "Dunkirk", "Get Out"],
 a1 = [["A", "B", "C", "D"],
       ["A", "B", "D", "C"]]
 
+a2 = [["A", "B", "C", "D"],
+      ["A", "B", "D", "C"],
+      ["B", "A", "D", "C"],
+      ["B", "A", "D", "C"],
+      ["D", "C", "B", "A"]]
+
+a3 = [["A", "B", "C", "D"],
+      ["A", "B", "D", "C"],
+      ["B", "A", "D", "C"],
+      ["D", "B", "A", "C"],
+      ["D", "B", "A", "C"]]
 -- Pegar uma lista com os filmes
 getListMovies :: [[String]] -> [String] -- head input
 getListMovies (a:at) = a
@@ -55,7 +66,7 @@ getOnIndex (a:at) i n | i == n = a
                       | otherwise = getOnIndex at i (n+1)
 
 findMin :: [(String, Int)] -> Int
-findMin [] = 99999999
+findMin [a] = snd a
 findMin (a:at) = min (snd a) (findMin at)
 
 findMax :: [(String, Int)] -> Int
@@ -69,14 +80,25 @@ removeWorst (a:at) maximo minimo | maximo == minimo = (a:at)
                                  | (snd a) == minimo = removeWorst at maximo minimo
                                  | otherwise = a : removeWorst at maximo minimo
 -- listMovies | moviesAndQntPos in N | N
-it :: [[String]] -> [String] -> [(String, Int)] -> Int -> [(String, Int)]
-it listP listM c n | length c == 1 = c
-                   | c == (removeWorst c (findMax c) (findMin c)) = it listP listM (vezesPosN listM listP (n+1)) (n+1)
-                   | otherwise = it listP listM (removeWorst c (findMax c) (findMin c)) n
+doIt :: [[String]] -> [String] -> [(String, Int)] -> Int -> [(String, Int)]
+doIt listP listM [] n = []
+doIt listP listM c n | (length c) == 1 = c
+                   | c == (removeWorst c (findMax c) (findMin c)) = doIt listP (getNewMovies c) (vezesPosN (getNewMovies c) listP (n+1)) (n+1) --Pegar nova lista de filmes
+                   | otherwise = doIt listP listM (removeWorst c (findMax c) (findMin c)) n
+
+getWinner :: [(String, Int)] -> String
+getWinner (a:at) = fst a
+
+getNewMovies :: [(String, Int)] -> [String]
+getNewMovies [] = []
+getNewMovies (a:at) = (fst a):getNewMovies at
+
+winner :: [[String]] -> String
+winner a = getWinner (doIt a (getListMovies a) (vezesPosN (getListMovies a) a 0) 0)
 
 
 
-
+------
 first :: [[String]] -> [[(String, Int)]]
 first (a:at) = map zipList (a:at)
 
