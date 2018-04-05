@@ -30,6 +30,9 @@ a = [["The Shape of Water", "Dunkirk", "Get Out"],
      ["Get Out", "Dunkirk", "The Shape of Water"],
      ["Dunkirk", "The Shape of Water", "Get Out"]]
 
+a1 = [["A", "B", "C", "D"],
+      ["A", "B", "D", "C"]]
+
 -- Pegar uma lista com os filmes
 getListMovies :: [[String]] -> [String] -- head input
 getListMovies (a:at) = a
@@ -63,10 +66,13 @@ findMax (a:at) = max (snd a) (findMax at)
 removeWorst :: [(String, Int)] -> Int -> Int -> [(String, Int)]
 removeWorst [] _ _ = []
 removeWorst (a:at) maximo minimo | maximo == minimo = (a:at)
-                                 | (snd a) == maximo = removeWorst at maximo minimo
+                                 | (snd a) == minimo = removeWorst at maximo minimo
                                  | otherwise = a : removeWorst at maximo minimo
-
-
+-- listMovies | moviesAndQntPos in N | N
+it :: [[String]] -> [String] -> [(String, Int)] -> Int -> [(String, Int)]
+it listP listM c n | length c == 1 = c
+                   | c == (removeWorst c (findMax c) (findMin c)) = it listP listM (vezesPosN listM listP (n+1)) (n+1)
+                   | otherwise = it listP listM (removeWorst c (findMax c) (findMin c)) n
 
 
 
