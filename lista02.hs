@@ -34,13 +34,39 @@ a = [["The Shape of Water", "Dunkirk", "Get Out"],
 getListMovies :: [[String]] -> [String] -- head input
 getListMovies (a:at) = a
 -- Qnts filmes tem, i.e., quantas posições possíveis
-qntPos :: [String] -> Int
-qntPos l = length l
--- (Filme, vetor qntd de vezes q apareceu na posição do índice)
--- ("Get Out", [1, 0, 2])
--- ("Dunkirk", [1, 2, 0])
--- ("The Shape of Water", [1, 1, 1])
-vezesPos :: [String] -> [[String]] -> [(String, [Int])]
+posMax :: [String] -> Int
+posMax l = (length l) - 1
+
+vezesPosN :: [String] -> [[String]] -> Int -> [(String, Int)]
+vezesPosN [] _ _ = []
+vezesPosN (a:at) l n = (a, vfn a l n) : vezesPosN at l n
+
+vfn :: String -> [[String]] -> Int -> Int
+vfn movie [] n = 0
+vfn movie (a:at) n | movie == (getOnIndex a n 0) = 1 + vfn movie at n
+                   | otherwise = vfn movie at n
+
+-- pega item no indice lista | indice pra pegar | 0 
+getOnIndex :: [t] -> Int -> Int -> t
+getOnIndex (a:at) i n | i == n = a
+                      | otherwise = getOnIndex at i (n+1)
+
+findMin :: [(String, Int)] -> Int
+findMin [] = 99999999
+findMin (a:at) = min (snd a) (findMin at)
+
+findMax :: [(String, Int)] -> Int
+findMax [] = -1
+findMax (a:at) = max (snd a) (findMax at)
+
+-- list | max | min
+removeWorst :: [(String, Int)] -> Int -> Int -> [(String, Int)]
+removeWorst [] _ _ = []
+removeWorst (a:at) maximo minimo | maximo == minimo = (a:at)
+                                 | (snd a) == maximo = removeWorst at maximo minimo
+                                 | otherwise = a : removeWorst at maximo minimo
+
+
 
 
 
@@ -69,3 +95,4 @@ countPositions :: (String, [Int]) -> Int -> Int
 countPositions (movie, []) _ = 0
 countPositions (movie, (a:at)) n | a == n = 1 + countPositions (movie, at) n
                                  | otherwise = countPositions (movie, at) n
+
