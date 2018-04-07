@@ -24,6 +24,89 @@ ftest x = x*x - 1
 ftest2 :: Double -> Double
 ftest2 x = x*x -3*x + 2
 
+-------------------------------- Question 2 --------------------------------
+
+--- A) ---
+thrice :: (a -> a) -> a -> a
+thrice f x = f (f (f x))
+{-
+
+(.) thrice map
+
+(.) :: (b -> c) -> (a -> b) -> (a -> c)
+
+thrice :: (t -> t) -> t -> t
+
+map :: (u -> v) -> [u] -> [v]
+
+a :: (u -> v)
+b :: [u] -> [v]
+
+b :: (t -> t)
+c :: t -> t
+
+Mas para b ser válido temos que:
+t -> t == [u] -> [v] => t == [u] && t == [v] => [u] == [v]
+t -> t == [u] -> [u]
+
+(.) thrice map :: (a -> c)
+(.) thrice map :: (u -> u) -> (t -> t) 
+-- Como t == [u], temos:
+(.) thrice map :: (u -> u) -> ([u] -> [u]) 
+
+-}
+
+--- B) ---
+swap :: a -> (a -> b) -> b
+swap f g = g f
+{-
+
+swap map thrice
+
+swap :: a -> (a -> b) -> b
+
+thrice :: (t -> t) -> t -> t
+
+map :: (u -> v) -> [u] -> [v]
+
+a1 :: (u -> v) -> [u] -> [v]
+
+a2 :: (t -> t) -> t
+b2 :: t
+OU
+a3 :: (t -> t)
+b3 :: t -> t
+
+Precisamos que a1 == a2 || a1 == a3
+Mas (u -> v) -> [u] -> [v] /= (t -> t) -> t && (u -> v) -> [u] -> [v] /= (t -> t)
+
+Logo não é possível fazer essa composição.
+
+-}
+
+--- C) ---
+
+{-
+
+(.) :: (b -> c) -> (a -> b) -> (a -> c)
+
+head :: [t] -> t
+-------  a   -> b
+tail :: [ts] -> [ts]
+-------  b   ->  c
+tail . head :: ([ts] -> [ts]) -> ([t] -> ts) -> ([t] -> [ts])
+-------------- ( b  ->  c ) -> ( a  -> b) -> ( a  ->  c )
+tail . head :: [t] -> [ts]
+
+Para isso ser possível temos que t deve ser uma lista,
+neste caso t :: [ts]
+logo [t] :: [[ts]]
+Podemos reescrever da seguinte forma:
+tail . head :: [[ts]] -> [ts]
+Essa função retorna a cauda da primeira lista de [t]
+
+-}
+
 -------------------------------- Question 3 --------------------------------
 
 a = [["The Shape of Water", "Dunkirk", "Get Out"],
@@ -96,31 +179,4 @@ getNewMovies (a:at) = (fst a):getNewMovies at
 winner :: [[String]] -> String
 winner a = getWinner (doIt a (getListMovies a) (vezesPosN (getListMovies a) a 0) 0)
 
-
-
-------
-first :: [[String]] -> [[(String, Int)]]
-first (a:at) = map zipList (a:at)
-
-zipList :: [String] -> [(String, Int)]    
-zipList l = zip l [0..]
-
-
-movP :: [String] -> [[(String, Int)]] -> [(String, [Int])]
-movP [] _ = []
-movP (a:at) l = (a, moviePositions l a) : movP at l
-
-moviePositions :: [[(String, Int)]] -> String -> [Int]
-moviePositions [] _ = []
-moviePositions (a:at) movie = [movieSum2 a movie] ++ (moviePositions at movie)
-
-movieSum2 :: [(String, Int)] -> String -> Int
-movieSum2 [] _ = 0
-movieSum2 (a:at) movie | movie == fst a = snd a
-                       | otherwise = movieSum2 at movie
-
-countPositions :: (String, [Int]) -> Int -> Int
-countPositions (movie, []) _ = 0
-countPositions (movie, (a:at)) n | a == n = 1 + countPositions (movie, at) n
-                                 | otherwise = countPositions (movie, at) n
-
+-----
