@@ -24,3 +24,12 @@ instance Ord Distance where
     (<=) (Miles v) (Miles u) = v <= u
     (<=) (Km k) (Miles m) = k*(1.609) <= m
     (<=) (Miles m) (Km k) = Km k <= Miles m
+
+unique :: Eq t => [t] -> [t]
+unique [] = []
+unique (x:xs) = x: unique[a | a <- xs, a /= x]
+
+b = Set [2,1,3,4]
+
+-- instance  Show Set where
+--     show (Set [t]) = "Empty" 

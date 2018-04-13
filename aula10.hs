@@ -1,4 +1,4 @@
-{- Aula 09 - 05/04 -}
+{- Aula 10 - 05/04 -}
 
 data Instrucao = PUSH Int | POP | ADD | SUB | DUP
 type Pilha = [Int]
