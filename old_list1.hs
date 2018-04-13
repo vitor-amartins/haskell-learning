@@ -1,4 +1,5 @@
 {- Listas 1 antigas -}
+import Data.List
 
 ----- 2016.2
 -- 2.
@@ -46,7 +47,7 @@ somaIntervalo i f m | i > f = 0
 sumDigits :: Int -> Int
 sumDigits n | n < 10 = n
             | otherwise = n `mod` 10 + sumDigits (n `div` 10)
---8.
+-- 8.
 nPrime :: Int -> Int
 nPrime n = primeIterations 1 2 n
 
@@ -60,3 +61,35 @@ testPrime n d | n < 2 = False
               | n `div` 2 < d = True
               | n `mod` d == 0 = False
               | otherwise = testPrime n (d+1)
+-- 9.
+clearTimeLine :: [String] -> [String]
+clearTimeLine [] = []
+clearTimeLine (a:at) | isInfixOf "Dilma" a || isInfixOf "Aecio" a = clearTimeLine at
+                     | otherwise = a : clearTimeLine at
+-- Remove the words Dilma and Aecio from inputs.
+clearTimeLine2 :: [String] -> [String]
+clearTimeLine2 list = map removeCandidates list 
+
+removeCandidates :: String -> String
+removeCandidates a = noCocaine (impeachment a)
+
+impeachment :: String -> String
+impeachment p | length p < 5 = p
+impeachment (a:b:c:d:e:f) | a == 'D' && b == 'i' && c == 'l' && d == 'm' && e == 'a' = impeachment f
+                          | otherwise = a : impeachment (b:c:d:e:f)
+
+noCocaine :: String -> String
+noCocaine p | length p < 5 = p
+noCocaine (a:b:c:d:e:f) | a == 'A' && b == 'e' && c == 'c' && d == 'i' && e == 'o' = noCocaine f
+                        | otherwise = a : noCocaine (b:c:d:e:f)
+-- 10.
+
+{- 2016.1 -}
+
+-- 1.
+bissexto :: Int -> Bool
+bissexto n = n `mod` 4 == 0 && ((n `mod` 100 == 0) == (n `mod` 400 == 0))
+
+tupla :: Int -> (Int, Int, Int)
+tupla n = (n `div` 100, (n `mod` 100) `div` 10, n `mod` 10)
+
