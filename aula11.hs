@@ -23,7 +23,7 @@ instance Ord Distance where
     (<=) (Km v) (Km u) = v <= u
     (<=) (Miles v) (Miles u) = v <= u
     (<=) (Km k) (Miles m) = k*(1.609) <= m
-    (<=) (Miles m) (Km k) = Km k <= Miles m
+    (<=) (Miles m) (Km k) = Km k >= Miles m
 
 unique :: Eq t => [t] -> [t]
 unique [] = []

@@ -85,7 +85,6 @@ noCocaine (a:b:c:d:e:f) | a == 'A' && b == 'e' && c == 'c' && d == 'i' && e == '
 -- 10.
 
 {- 2016.1 -}
-
 -- 1.
 bissexto :: Int -> Bool
 bissexto n = n `mod` 4 == 0 && ((n `mod` 100 == 0) == (n `mod` 400 == 0))
